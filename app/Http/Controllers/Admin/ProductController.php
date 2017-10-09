@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Category;
+use App\Diskon;
 
 class ProductController extends Controller
 {
@@ -15,9 +16,9 @@ class ProductController extends Controller
      */
     protected $title = 'Product';
     protected $page = 'product';
-    protected  $form = ['name'=>'text','stok'=>'number','price'=>'number','deskripsi'=>'textarea','foto'=>'file','kategori'=>'select'];
-    protected $edit = ['name','stok','price','deskripsi','foto','kategori'];
-    protected $field = ['nama_produk','stok_produk','harga_produk','deskripsi','foto','id_kategori','permalink'];
+    protected  $form = ['name'=>'text','stok'=>'number','price'=>'number','deskripsi'=>'textarea','foto'=>'file','kategori'=>'select-kategori','Diskon'=>'select-diskon'];
+    protected $edit = ['name','stok','price','deskripsi','foto','kategori','id_diskon'];
+    protected $field = ['nama_produk','stok_produk','harga_produk','deskripsi','foto','id_kategori','id_diskon','permalink'];
     protected $heads = ['Product','Stock'];
     protected $key = 'id';
     protected $tr = ['nama_produk','stok_produk'];

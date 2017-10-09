@@ -20,6 +20,7 @@ Auth::routes();
 Route::resource('/admin/product', 'Admin\ProductController');
 Route::resource('/admin/category', 'Admin\CategoryController');
 Route::resource('/admin/bank', 'Admin\BankController');
+Route::resource('/admin/diskon', 'Admin\DiskonCOntroller');
 Route::get('/admin/transactions','Admin\TransactionController@index');
 Route::post('/admin/transaction','Admin\TransactionController@change')->name('change.transaction');
 Route::get('/admin/transaction','Admin\TransactionController@search')->name('search.transaction');
