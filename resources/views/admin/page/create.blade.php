@@ -15,10 +15,16 @@
 	      			<label>{{ ucfirst($input) }}</label>
 
 
-	      			@if($type == 'select')
+	      			@if($type == 'select-kategori')
 	      			<select class="form-control" name="{{$input}}">
 	      				@foreach($dataselect as $d)
 	      					<option value="{{$d->id}}">{{$d->nama_kategori}}</option>
+	      				@endforeach
+	      			</select>
+	      			@elseif($type == 'select-diskon')
+	      			<select class="form-control" name="{{$input}}">
+	      				@foreach($diskons as $d)
+	      					<option value="{{$d->id_diskon}}">{{$d->nama}}</option>
 	      				@endforeach
 	      			</select>
 	      			@elseif($type == 'textarea')

@@ -38,6 +38,7 @@ class MainController extends Controller
         $getId = Product::where('permalink',$product)->first();
         $data = Product::find($getId->id);
 
+
         $cart = Cart::where('id_produk',$getId->id)
                 ->where('id_user',Auth::user()->id)
                 ->where('status',0)->count();

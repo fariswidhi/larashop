@@ -23,6 +23,8 @@
 			<li><a href="{{ @url('/admin/product') }}">Product</a></li>
 			<li><a href="{{ @url('/admin/bank') }}">Bank</a></li>
 			<li><a href="{{ @url('/admin/transactions') }}">Transaction</a></li>
+			<li><a href="{{ @url('/admin/diskon') }}">Discount</a></li>
+			<li><a href="{{ @url('/admin/voucher') }}">Voucher</a></li>
 			<li><a href="#">Menu</a></li>
 <!--       <li><a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout
             </a></li> -->

@@ -18,12 +18,12 @@ class DiskonController extends Controller
     protected  $form = ['nama'=>'text','potongan'=>'text','mulai'=>'date','berakhir'=>'date'];
     protected $edit = ['nama','potongan','mulai','berakhir'];
     protected $field = ['nama','potongan','mulai','berakhir'];
-    protected $heads = ['diskon'];
+    protected $heads = ['Diskon','Potongan'];
     protected $key = 'id_diskon';
     protected $tr = ['nama','potongan'];
 
     public function data_json(){
-        
+            
     }
 
     public function index()

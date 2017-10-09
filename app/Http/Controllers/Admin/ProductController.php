@@ -58,8 +58,9 @@ class ProductController extends Controller
         $title =$this->title;
         $page = $this->page;
         $dataselect = Category::all();
-        
-        return view('admin/page/create',compact('form','title','page','dataselect'));
+        $diskons = Diskon::all();
+
+        return view('admin/page/create',compact('form','title','page','dataselect','diskons'));
     }
 
     /**
@@ -75,7 +76,7 @@ class ProductController extends Controller
         $class = new Product;
         $edit = $this->edit;
 
-
+        
 
         $class->nama_produk = $request->name;
         $class->stok_produk = $request->stok;
@@ -83,6 +84,8 @@ class ProductController extends Controller
         $class->permalink = str_replace(' ', '-', strtolower($request->name));
         $class->deskripsi = $request->deskripsi;
         $class->id_kategori = $request->kategori;
+        $class->id_diskon = $request->Diskon;
+
         if ($request->foto !==null) {
         $photoName = time().'.'.$request->foto->getClientOriginalExtension();
         $request->foto->move(public_path('img'),$photoName);
@@ -143,7 +146,6 @@ class ProductController extends Controller
         $id = $id;
         $title = $this->title;
         $dataselect = Category::all();
-
 
         return view('admin/page/product/edit',compact('data','dataselect','title','page','id'));
     }

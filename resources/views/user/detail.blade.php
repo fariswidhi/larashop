@@ -5,7 +5,13 @@
 	<div class="xl-9">
 		<div class="wrap-panel">
 			<div class="panel">
-		<h3 style="margin: 0;padding: 5px;">{{ $data->nama_produk }}</h3>
+		<h3 style="margin: 0;padding: 5px;">{{ $data->nama_produk }}
+		@if($data->id_diskon != 0)
+			({{'Diskon '.$data->diskon->potongan.' %'}})
+		@endif
+		</h3>
+
+
 		@if(session('info'))
 		{{session('info')}}
 		@endif
