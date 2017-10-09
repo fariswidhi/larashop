@@ -1,0 +1,91 @@
+Schema::create('migrations', function (Blueprint $table) {
+$table->integer('id');
+$table->char('migration', 60);
+$table->integer('batch');
+Schema::create('password_resets', function (Blueprint $table) {
+$table->char('email', 60);
+$table->char('token', 60);
+$table->timestamp('created_at');
+Schema::create('tb_bank', function (Blueprint $table) {
+$table->integer('id');
+$table->char('bank_name', 60);
+$table->char('name', 60);
+$table->char('rekening', 60);
+$table->timestamp('created_at');
+$table->timestamp('updated_at');
+Schema::create('tb_foto', function (Blueprint $table) {
+$table->integer('id_foto');
+$table->char('foto', 60);
+$table->timestamp('created_at');
+$table->timestamp('updated_at');
+Schema::create('tb_kategori', function (Blueprint $table) {
+$table->integer('id');
+$table->char('nama_kategori', 60);
+$table->timestamp('created_at');
+$table->timestamp('updated_at');
+Schema::create('tb_pembayaran', function (Blueprint $table) {
+$table->integer('id');
+$table->integer('id_bank');
+$table->char('id_transaksi', 60)->default('');
+$table->tinyInteger('status');
+$table->timestamp('created_at');
+$table->timestamp('updated_at');
+Schema::create('tb_produk', function (Blueprint $table) {
+$table->integer('id');
+$table->char('nama_produk', 60);
+$table->integer('stok_produk');
+$table->integer('harga_produk');
+$table->char('permalink', 60);
+$table->text('deskripsi');
+$table->char('foto', 60);
+$table->integer('id_kategori');
+$table->timestamp('created_at');
+$table->timestamp('updated_at');
+Schema::create('tb_transaksi_detail', function (Blueprint $table) {
+$table->char('id_transaksi', 60);
+$table->char('nama_penerima', 60);
+$table->text('alamat_penerima');
+$table->tinyInteger('jenis_transaksi');
+$table->integer('id_transaksi_satuan');
+$table->integer('id_transaksi_keranjang');
+$table->tinyInteger('status_transaksi');
+$table->integer('kode_unik');
+$table->integer('total');
+$table->integer('id_user');
+$table->timestamp('created_at');
+$table->timestamp('updated_at');
+Schema::create('tb_transaksi_keranjang', function (Blueprint $table) {
+$table->integer('id_transaksi_keranjang');
+$table->integer('id_user');
+$table->integer('id_produk');
+$table->integer('jumlah_produk')->nullable();
+$table->integer('harga')->nullable();
+$table->integer('subtotal')->nullable();
+$table->tinyInteger('status');
+$table->timestamp('created_at');
+$table->timestamp('updated_at');
+Schema::create('tb_transaksi_satuan', function (Blueprint $table) {
+$table->integer('id_transaksi_satuan');
+$table->integer('id_user');
+$table->integer('id_produk');
+$table->tinyInteger('status');
+$table->integer('jumlah_produk');
+$table->integer('harga');
+$table->integer('subtotal');
+$table->timestamp('created_at');
+$table->timestamp('updated_at');
+Schema::create('users', function (Blueprint $table) {
+$table->integer('id');
+$table->char('username', 60);
+$table->char('nama_lengkap', 60);
+$table->char('password', 60);
+$table->char('email', 60);
+$table->char('no_hp', 60)->default('');
+$table->text('alamat');
+$table->tinyInteger('jk');
+$table->char('foto', 60)->default('');
+$table->tinyInteger('level');
+$table->char('remember_token', 100)->default('');
+$table->timestamp('created_at');
+$table->timestamp('updated_at');
+});
