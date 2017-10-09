@@ -134,11 +134,18 @@ class MainController extends Controller
 
             $produk = Product::find($request->produk[$key]);
             $harga =  $produk->harga_produk;
-
+            $diskon = $request->discount[$key];
+            if ($diskon == 0) {
+                $totaldiskon = $value * $harga;
+            }
+            else{
+                $totaldiskon = $value * $harga * ($diskon/100);
+            }
             $cart = Cart::find($request->cart_id[$key]);
             $cart->jumlah_produk = $value;
             $cart->harga = $harga;
-            $cart->subtotal = $value * $harga;
+            $cart->diskon = $diskon;
+            $cart->subtotal = $totaldiskon;
             $cart->save();
 
            
@@ -192,13 +199,25 @@ class MainController extends Controller
             $transaction->total = $data->subtotal;
             $transaction->save();
 
+
             $update = Cart::find($data->id_transaksi_keranjang);
             $update->status = 1;
             $update->save();
+
+
+            $cart = Cart::find($data->id_transaksi_keranjang)->first();
+
+
+
+            $product = Product::find($data->id_produk);
+            // print_r($product);
+            $product->stok_produk =  $product->stok_produk - $cart->jumlah_produk;
+            $product->save();
+
         }
 
-
         return redirect('success/'.strtoupper($code));
+
 
  
 
@@ -237,12 +256,14 @@ class MainController extends Controller
 
         $produk = Product::find($request->produk);
         $harga = $produk->harga_produk;
+        $diskon = $request->diskon;
 
         $input = new SingleCart;
         $input->id_user= Auth::user()->id;
         $input->id_produk = $request->produk;
         $input->jumlah_produk = $request->stok;
         $input->harga = $harga;
+        $input->diskon = $diskon;
         $input->status = 0;
         $input->subtotal = $request->stok * $harga;
         $input->save();
@@ -261,6 +282,15 @@ class MainController extends Controller
             $transaction->kode_unik = $randomString;
             $transaction->total = $lastInput->subtotal;
             $transaction->save();
+
+
+            $cart = SingleCart::find($lastInput->id_transaksi_satuan)->first();
+
+            $product = Product::find($cart->id_produk);
+            // print_r($product);
+            $product->stok_produk =  $product->stok_produk - $cart->jumlah_produk;
+            $product->save();
+
 
         return redirect('success/'.strtoupper($code));
 

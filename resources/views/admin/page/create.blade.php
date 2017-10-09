@@ -23,9 +23,15 @@
 	      			</select>
 	      			@elseif($type == 'select-diskon')
 	      			<select class="form-control" name="{{$input}}">
+	      					<option value="0">Tidak</option>
 	      				@foreach($diskons as $d)
 	      					<option value="{{$d->id_diskon}}">{{$d->nama}}</option>
 	      				@endforeach
+	      			</select>
+	      				@elseif($type == 'select-aktif')
+	      			<select class="form-control" name="{{$input}}">
+	      					<option value="1">Ya</option>
+	      					<option value="0">Tidak</option>
 	      			</select>
 	      			@elseif($type == 'textarea')
 	      			<textarea name="{{$input}}" class="form-control"></textarea>

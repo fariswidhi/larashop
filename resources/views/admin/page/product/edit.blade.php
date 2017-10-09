@@ -33,6 +33,16 @@
 	      				<option value="{{$d->id}}">{{$d->nama_kategori}}</option>
 	      				@endforeach
 	      			</select>
+	<label>Diskon</label>
+
+
+	      				      			<select class="form-control" name="Diskon">
+	      					<option value="0">Tidak</option>
+	      					@foreach($diskons as $data)
+	      					<option value="{{$data->id_diskon}}">{{$data->nama}}</option>
+	      					@endforeach
+
+	      					</select>
 
 	      		<button class="btn btn-primary" type="submit">Save</button>
 	      		</form>

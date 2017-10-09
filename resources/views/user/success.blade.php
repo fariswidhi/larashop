@@ -23,12 +23,20 @@
 												<div class="xl-12" style="margin: 5px;">
 													<h1>Detail Belanjaan</h1>
 												<table class="table table-striped">
+													<thead>
+														<th>Produk</th>
+														<th>Harga</th>
+														<th>Diskon</th>
+														<th>Jumlah</th>
+														<th>Subtotal</th>
+													</thead>
 														<tbody>
 															@if($keranjang == null)
 															@foreach($data as $d)
 															<tr>
 																<td>{{$d->single->produk->nama_produk}}</td>
 																<td>{{$d->single->harga}}</td>
+																<td>{{$d->single->diskon}}</td>
 																<td>{{$d->single->jumlah_produk}}</td>
 																<td>{{$d->single->subtotal}}</td>
 															</tr>
@@ -38,6 +46,7 @@
 															<tr>
 																<td>{{$d->cart->produk->nama_produk}}</td>
 																<td>{{$d->cart->harga}}</td>
+																<td>{{$d->cart->diskon}}</td>
 																<td>{{$d->cart->jumlah_produk}}</td>
 																<td>{{$d->cart->subtotal}}</td>
 															</tr>
@@ -45,7 +54,7 @@
 
 															@endif
 															<tr>
-																<td colspan="3"><b>Total</b></td>
+																<td colspan="4"><b>Total</b></td>
 																<td>{{$total}}</td>
 															</tr>
 														</tbody>

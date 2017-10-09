@@ -25,6 +25,7 @@
 										<input type="text" name="alamat" class="input" required value="{{Auth::user()->alamat}}">
 										<input type="hidden" name="produk" value="{{$data->id}}">
 										<input type="hidden" name="stok" value="" id="banyak-produk">
+										<input type="hidden" name="diskon" id="diskon">
 											</div>
 											<div style="margin: 5px;">
 													<button class="btn btn-blue" type="button" id="btn-buy">Beli</button>
@@ -76,7 +77,9 @@
 									<tr>
 									<td>Stok</td><td><span class="price">{{ $data->harga_produk }}</span></td>
 									</tr>
-
+									<tr>
+										<td>Diskon</td><td class="diskon">{{$data->id_diskon == 0 ? '0' : $data->diskon->potongan }}</td>
+									</tr>
 									<tr>
 									<td>Deskripsi</td><td>{{ $data->deskripsi }}</td>
 									</tr>

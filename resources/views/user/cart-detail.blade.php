@@ -81,6 +81,9 @@
 									<td>Jumlah</td><td>{{ $data->jumlah_produk }}</td>
 									</tr>
 									<tr>
+									<td>Diskon</td><td>{{ $data->produk->id_diskon == 0 ? '0' : $data->produk->diskon->potongan."%" }}</td>
+									</tr>
+									<tr>
 									<td>Subtotal</td><td>{{ $data->subtotal }}</td>
 									</tr>
 

@@ -146,8 +146,9 @@ class ProductController extends Controller
         $id = $id;
         $title = $this->title;
         $dataselect = Category::all();
+        $diskons = Diskon::all();
 
-        return view('admin/page/product/edit',compact('data','dataselect','title','page','id'));
+        return view('admin/page/product/edit',compact('data','dataselect','title','page','id','diskons'));
     }
 
     /**
@@ -168,23 +169,16 @@ class ProductController extends Controller
         $request->foto->move(public_path('img'),$photoName);
 
         }
-         foreach ($this->field as $field =>$val) {
-            $name = $edit[$field];
-
-
-            if ($name == 'foto') {
-                
-                if ($request->foto != null) {
-                $class->$val = $photoName;
-                }
-            }
-
-            else{
-            $class->$val = $request->$name;
-            }
-
-// echo $val;
+        $class->nama_produk = $request->name;
+        $class->stok_produk = $request->stok;
+        $class->harga_produk = $request->price;
+        $class->deskripsi = $request->deskripsi;
+        if ($request->foto != null) {
+        $class->foto = $photoName;
         }
+        $class->id_kategori = $request->kategori;
+        $class->id_diskon = $request->Diskon;
+
 
         $class->save();
 

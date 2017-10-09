@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Diskon extends Model
+class Voucher extends Model
 {
     //
     protected $table="tb_voucher";

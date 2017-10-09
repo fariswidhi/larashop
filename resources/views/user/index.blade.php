@@ -191,7 +191,18 @@ $(document).on('click','#btn-buy',function(){
 					$(this).val(0);
 				}
 				else{
-					$(".cart-total-"+id).text(parseInt($(this).val()) * parseInt($(".cart-price-"+id).text()));
+					var diskon = parseInt($(".discount-"+id).text());
+
+					var harga = parseInt($(this).val()) * parseInt($(".cart-price-"+id).text());
+
+					if (diskon!=0) {
+						var total = harga * (diskon/100);
+					}
+					else{
+						total = harga;
+					}
+
+					$(".cart-total-"+id).text(total);
 				}
 			}
 
@@ -203,13 +214,21 @@ $(document).on('click','#btn-buy',function(){
 				$("#qty").keyup(function(){
 			var stock = parseInt($(".stock").text());
 			var price = parseInt($(".price").text());
+			var diskon = parseInt($(".diskon").text());
 			if ($(this).val() > stock || $(this).val() < 0) {
 					alert('tidak bisa');
 					$(this).val(0);
 
 			}
 			else{
-				$("#total").text(price * $(this).val());
+				if (diskon == 0) {
+					var totaldiskon = price * $(this).val();
+				}
+				else{
+					totaldiskon = price * $(this).val() * (diskon/100);
+				}
+				$("#total").text(totaldiskon);
+				$("#diskon").val(diskon);
 				$("#banyak-produk").val($(this).val());
 			}
 		});
