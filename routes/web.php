@@ -48,6 +48,7 @@ Route::post('/search/','MainController@wrap_search')->name('getsearch.product');
 Route::get('/search/{query}','MainController@search')->name('search.product');
 
 Route::get('/{category}','MainController@category');
+
 Route::get('useVoucher/{code}','MainController@useVoucher');
 
 
