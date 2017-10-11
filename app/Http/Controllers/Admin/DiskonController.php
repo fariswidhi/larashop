@@ -36,7 +36,7 @@ class DiskonController extends Controller
         $page = $this->page;
         $title = $this->title;
                 $tr = $this->tr;
-        return view('admin/page/view',compact('heads','data','fields','key','page','title','tr'));
+        return view('admin/page/diskon/view',compact('heads','data','fields','key','page','title','tr'));
     }
 
     /**
@@ -50,7 +50,7 @@ class DiskonController extends Controller
         $form = $this->form;
         $title =$this->title;
         $page = $this->page;
-        return view('admin/page/create',compact('form','title','page'));
+        return view('admin/page/diskon/create',compact('form','title','page'));
     }
 
     /**
@@ -63,15 +63,18 @@ class DiskonController extends Controller
     {
         //
 
+
         $class = new Diskon;
-        $edit = $this->edit;
-        foreach ($this->field as $field =>$val) {
-            $name = $edit[$field];
-
-            $class->$val = $request->$name;
-
-// echo $val;
+        $class->nama =      $request->nama;
+        if ($request->potongan2 != null) {
+            $potongan = $request->potongan.','.$request->potongan2;
         }
+        else{
+            $potongan = $request->potongan;   
+        }
+        $class->potongan =  $potongan;
+        $class->mulai =     $request->mulai;
+        $class->berakhir =  $request->berakhir;
 
         $class->save();
 

@@ -55,14 +55,31 @@
 															@endif
 															<tr>
 																<td colspan="4"><b>Total</b></td>
-																<td>{{$total}}</td>
+																<td>{{$diskon == 0 ? $total : $total .'-'. $diskon}}</td>
 															</tr>
 														</tbody>
 													</table>
 													<br>
 													Total Yang Kamu Bayar,
+													@if($diskon-$total == 0)
 													<center>
-													<h2>{{'Rp. '.number_format($total+$kodeunik,2,',','.')}}</h2>
+														<h2>Gratis</h2>
+														<span>Tunggu 2 x 24 Jam untuk menerima Barang </span>
+													</center>
+													@else
+													<center>
+													<h2>{{'Rp. '.number_format($total-$diskon+$kodeunik,2,',','.')}}</h2>
+
+													@if($countUserTransaction != null)
+													@if($UserTransaction->total_transaksi == $voucher->banyak_transaksi)
+													<br>
+
+													Voucher Anda : <b>{{$UserTransaction->total_voucher}}</b>
+													<br>
+													<a href="{{@url('useVoucher/'.$code)}}">Pakai Voucher?</a>
+													<br>
+													@endif
+													@endif
 													<br>
 													Untuk mempercepat verifikasi, bayarkan sesuai nominal diatas.
 
@@ -78,6 +95,7 @@
 													<h3 style="padding: 0;margin: 0;">{{$bank->bank_name}}</h3> <br>									{{$bank->rekening}}
 												</div>
 												@endforeach
+														@endif
 											</div>
 										</div>
 									</div>

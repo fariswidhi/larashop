@@ -12,6 +12,9 @@ use App\SingleCart;
 use App\User;
 use App\Category;
 use App\Bank;
+use App\Voucher;
+use App\UserTransaction;
+
 class MainController extends Controller
 {
     /**
@@ -81,8 +84,10 @@ class MainController extends Controller
         if (Auth::check()) {
         $getId = Product::where('permalink',$product)->first();
         $data = Product::find($getId->id);
+        $UserTransaction = UserTransaction::where('id_user',Auth::user()->id)->first();
+        $voucher = Voucher::where('aktif','1')->first();
 
-        return view('user/buy',compact('data'));
+        return view('user/buy',compact('data','UserTransaction','voucher'));
          }
          else{
             return redirect()->back()->with('info','Login Dulu');
@@ -135,17 +140,31 @@ class MainController extends Controller
             $produk = Product::find($request->produk[$key]);
             $harga =  $produk->harga_produk;
             $diskon = $request->discount[$key];
-            if ($diskon == 0) {
-                $totaldiskon = $value * $harga;
-            }
+            $stok =  $request->qty[$key];
+
+        if ($diskon == 0) {
+            $subtotal = $request->qty[$key] * $harga;
+        }
+        else{
+
+            $diskons = explode(',', $diskon);
+
+               
+            if (count($diskons)==2) {
+                $subtotal = ($diskons[1]/100) * ($stok *  ( $harga - ($harga * ($diskons[0]/100))));
+                }
             else{
-                $totaldiskon = $value * $harga * ($diskon/100);
+                $subtotal = $stok *($harga - ($harga * ($diskons[0]/100))) ;
             }
+
+        }
+
+
             $cart = Cart::find($request->cart_id[$key]);
             $cart->jumlah_produk = $value;
             $cart->harga = $harga;
             $cart->diskon = $diskon;
-            $cart->subtotal = $totaldiskon;
+            $cart->subtotal = $subtotal;
             $cart->save();
 
            
@@ -185,6 +204,7 @@ class MainController extends Controller
 
         foreach ($d as $data) {
 
+
             $transaction = new Transaction;
             $code ='TRN'.strtoupper($str);
             $transaction->id_transaksi = $code;
@@ -193,8 +213,8 @@ class MainController extends Controller
             $transaction->id_user = Auth::user()->id;
             $transaction->jenis_transaksi = 2;
             $transaction->id_transaksi_keranjang = $data->id_transaksi_keranjang;
-            $transaction->status_transaksi = 2;
-            $subtotal = $data->subtotal;
+            $transaction->status_transaksi = 0;
+            $subtotal   = $data->subtotal;
             $transaction->kode_unik = $randomString;
             $transaction->total = $data->subtotal;
             $transaction->save();
@@ -225,15 +245,64 @@ class MainController extends Controller
     }
 
     public function success($code){
+        $num = Transaction::where('id_transaksi',$code)->count();
+
+        if ($num != null) {
         $data = Transaction::where('id_transaksi',$code)->get();
-        $total = Transaction::select(DB::raw("SUM(total) as total"))->where('id_transaksi',$code)->first()->total;
+        $subtotal = Transaction::select(DB::raw("SUM(total) as total"))->where('id_transaksi',$code)->first()->total;
+        $diskon = Transaction::select(DB::raw("SUM(total) as total"))->where('id_transaksi',$code)->first()->diskon;
+        $total = $subtotal-$diskon;
+
         $banks = Bank::all();
         $first = Transaction::where('id_transaksi',$code)->first();
+        $UserTransaction = UserTransaction::where('id_user',Auth::user()->id)->first();
+        $countUserTransaction  = UserTransaction::where('id_user',Auth::user()->id)->count();
+        $voucher = Voucher::where('aktif','1')->first();
         $kodeunik = $first->kode_unik;
         $keranjang = $first->id_transaksi_keranjang;
+        $diskon = $first->diskon;
 
 
-        return view('user/success',compact('data','total','kodeunik','keranjang','banks'));
+
+        return view('user/success',compact('data','total','kodeunik','keranjang','banks','voucher','UserTransaction','code','diskon','countUserTransaction'));
+        }
+
+        return abort(404);
+
+    }
+
+
+    public function useVoucher($code){
+        $UserTransaction = UserTransaction::where('id_user',Auth::user()->id)->first();
+        $voucherCount = Voucher::where('aktif','1')->count();
+        if ($voucherCount != 0) {
+        $voucher = Voucher::where('aktif','1')->first();
+        
+        $voucherTotal = $UserTransaction->total_voucher;
+        
+
+        $total = Transaction::select(DB::raw("SUM(total) as total"))->where('id_transaksi',$code)->first()->total;
+
+        if ($voucherTotal > $total) {
+            // Ubah Voucher
+            $datatotal = $voucherTotal-$total;
+            UserTransaction::where('id_user',Auth::user()->id)->update(['total_voucher'=>$voucherTotal-$total]);
+
+            Transaction::where('id_transaksi',$code)->update(['diskon'=> $total]);
+
+
+        }
+        else{
+            $datatotal = $total-$voucherTotal;   
+            UserTransaction::where('id_user',Auth::user()->id)->update(['total_voucher'=>$voucherTotal-$voucherTotal]);
+            Transaction::where('id_transaksi',$code)->update(['diskon'=> $datatotal]);     
+
+        }
+
+
+        }
+
+    return redirect()->back();
     }
 
     public function buyTransaction(Request $request){
@@ -258,6 +327,22 @@ class MainController extends Controller
         $harga = $produk->harga_produk;
         $diskon = $request->diskon;
 
+        if ($diskon == 0) {
+            # code...
+            $subtotal = $request->stok * $harga;
+        }
+        else{
+            $diskons = explode(',', $diskon);
+            if (count($diskons)==2) {
+                                    // totaldiskon = (diskon2/100) * ($(this).val() * (price - (price * (diskon/100))));
+                $subtotal = ($diskons[1]/100) * ($request->stok *  ( $harga - ($harga * ($diskons[0]/100))));                
+            }
+            else{
+             $subtotal = $request->stok *($harga - ($harga * ($diskons[0]/100))) ;
+            }
+
+        }
+
         $input = new SingleCart;
         $input->id_user= Auth::user()->id;
         $input->id_produk = $request->produk;
@@ -265,20 +350,20 @@ class MainController extends Controller
         $input->harga = $harga;
         $input->diskon = $diskon;
         $input->status = 0;
-        $input->subtotal = $request->stok * $harga;
+        $input->subtotal = $subtotal;
         $input->save();
 
         $lastInput = SingleCart::where('id_user',Auth::user()->id)->where('id_produk',$request->produk)->orderBy('created_at', 'desc')->first();
-
+// print_r($lastInput)
             $transaction = new Transaction;
             $code = 'TRN'.strtoupper($str);
             $transaction->id_transaksi = $code;
             $transaction->nama_penerima = $request->nama;
             $transaction->alamat_penerima = $request->alamat;
-            $transaction->jenis_transaksi = 2;
+            $transaction->jenis_transaksi = 1;
             $transaction->id_user = Auth::user()->id;
             $transaction->id_transaksi_satuan = $lastInput->id_transaksi_satuan;
-            $transaction->status_transaksi = 1;
+            $transaction->status_transaksi = 0;
             $transaction->kode_unik = $randomString;
             $transaction->total = $lastInput->subtotal;
             $transaction->save();
@@ -286,10 +371,13 @@ class MainController extends Controller
 
             $cart = SingleCart::find($lastInput->id_transaksi_satuan)->first();
 
-            $product = Product::find($cart->id_produk);
+            $product = Product::find($lastInput->produk->id);
+
             // print_r($product);
-            $product->stok_produk =  $product->stok_produk - $cart->jumlah_produk;
+            $product->stok_produk =  $lastInput->produk->stok_produk - $cart->jumlah_produk;
             $product->save();
+
+
 
 
         return redirect('success/'.strtoupper($code));
@@ -297,7 +385,9 @@ class MainController extends Controller
 
     }
 public function profile(){
-    return view('user/profile');
+    $UserTransaction = UserTransaction::where('id_user',Auth::user()->id);
+
+    return view('user/profile',compact('UserTransaction'));
 }
 
 public function change_profile(Request $request){

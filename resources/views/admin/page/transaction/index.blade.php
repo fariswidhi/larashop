@@ -35,10 +35,11 @@
 						<form action="{{@route('change.transaction')}}" method="post">
 						{{@csrf_field()}}	
 							<input type="hidden" name="transaction" value="{{$d->id_transaksi}}">
-						<select class="form-control" name="status" onchange="this.form.submit()">
-						<option value="">Menunggu</option>
-						<option {{$d->status_transaksi == 1 ? 'selected' : ''}} value="1">Ditolak</option>
-						<option {{$d->status_transaksi == 2 ? 'selected' : ''}} value="2">Dikirm</option>
+
+						<select class="form-control" name="status" onchange="this.form.submit()" {{ $d->status_transaksi==2 ? 'disabled':'' }}>
+						<option {{$d->status_transaksi == 0 ? 'selected' : ''}} value="0">Menunggu</option>
+						<option {{$d->status_transaksi == 2 ? 'selected' : ''}} value="2">Ditolak</option>
+						<option {{$d->status_transaksi == 1 ? 'selected' : ''}} value="1">Dikirm</option>
 					</select>
 					</form>
 				</td>
@@ -47,12 +48,16 @@
 			</tbody>
 
 		</table>			
+
 </div>
 
 
         <button  class="btn btn-primary btn-previous">Sebelumnya</button>
           <button  class="btn btn-primary btn-next">Selanjutnya</button>
+<br>
+		<b>Jika Anda Menolak Maka data tidak bisa diubah lagi</b>
     </div>
+
 
 
 @endsection

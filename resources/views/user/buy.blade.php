@@ -26,6 +26,7 @@
 										<input type="hidden" name="produk" value="{{$data->id}}">
 										<input type="hidden" name="stok" value="" id="banyak-produk">
 										<input type="hidden" name="diskon" id="diskon">
+
 											</div>
 											<div style="margin: 5px;">
 													<button class="btn btn-blue" type="button" id="btn-buy">Beli</button>
@@ -37,10 +38,12 @@
 										<div style="margin: 5px">
 											<table class="table table-striped">
 											<tbody>
+
+
 												<tr>
 													<td>Jumlah</td><td><span id="total"></span></td>
 												</tr>
-											</tbody>
+												</tbody>
 										</table>
 										</div>
 									</div>
@@ -78,7 +81,27 @@
 									<td>Stok</td><td><span class="price">{{ $data->harga_produk }}</span></td>
 									</tr>
 									<tr>
-										<td>Diskon</td><td class="diskon">{{$data->id_diskon == 0 ? '0' : $data->diskon->potongan }}</td>
+										@php 
+										if($data->id_diskon != 0){
+											$diskons = explode(',',$data->diskon->potongan);
+											
+											if(count($diskons) < 1){
+											$array = [];
+											$array[0] = $diskons[0];
+											}
+											else{
+											$array = [];
+											$array = $diskons;
+											}
+										}
+
+										@endphp
+										@if($data->id_diskon != 0)
+										<td>Diskon</td><td><span class="diskon" style="display: none;">{{$array[0]}}</span><span  style="display: none;" class="diskon-2">{{count($array) == 2 ? $array[1] : '0'}}</span>{{count($array) > 1 ? $array[0].'+'.$array[1] : $array[0]}}</td>
+										@else
+										<td>Diskon</td><td><span class="diskon" style="display: none;">0</span><span class="diskon-2">0</span></td>
+										@endif
+
 									</tr>
 									<tr>
 									<td>Deskripsi</td><td>{{ $data->deskripsi }}</td>

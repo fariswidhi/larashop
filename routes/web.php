@@ -48,14 +48,15 @@ Route::post('/search/','MainController@wrap_search')->name('getsearch.product');
 Route::get('/search/{query}','MainController@search')->name('search.product');
 
 Route::get('/{category}','MainController@category');
-
-
-Route::get('/{category}/{product}','MainController@detail');
+Route::get('useVoucher/{code}','MainController@useVoucher');
 
 
 Route::get('/profile/change',function(){
 	return view('user/change-profile');
 });
+Route::get('/{category}/{product}','MainController@detail');
+
+
 
 
 Route::post('/buy','MainController@buyTransaction')->name('buy.transaction');

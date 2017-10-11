@@ -30,4 +30,6 @@ class User extends Authenticatable
     public function isAdmin(){
         return $this->level == 1 ? true : false;
     }
+
+
 }

@@ -28,7 +28,33 @@
 							<input type="hidden" name="cart_id[]" value="{{$d->id_transaksi_keranjang}}">
 							<input type="hidden" name="produk[]" value="{{$d->produk->id}}">
 							<input type="hidden" name="discount[]" value="{{$d->produk->id_diskon == 0 ? '0' : $d->produk->diskon->potongan}}">
-							<td class="discount-{{$d->id_transaksi_keranjang}}">{{$d->produk->id_diskon == 0 ? '0' : $d->produk->diskon->potongan}}</td>
+
+										@php 
+
+										if($d->produk->id_diskon != 0){
+											$diskons = explode(',',$d->produk->diskon->potongan);
+											if(count($diskons) < 1){
+											$array = [];
+											$array[0] = $diskons[0];
+											}
+											else{
+											$array = [];
+											$array = $diskons;
+											}
+										}
+
+										@endphp
+										@if($d->produk->id_diskon != 0)
+										<td><span class="diskon-{{$d->id_transaksi_keranjang}}" style="display: none;">{{$array[0]}}</span>
+											<span  style="display: none;" class="diskon-2-{{$d->id_transaksi_keranjang}}">{{count($array) == 2 ? $array[1] : '0'}}</span>
+											{{count($array) > 1 ? $array[0].'+'.$array[1] : $array[0]}}
+
+										</td>
+										@else
+										<td><span class="diskon-{{$d->id_transaksi_keranjang}}" style="display: none;">0</span><span class="diskon-2-{{$d->id_transaksi_keranjang}}">0</span></td>
+										@endif
+
+
 							<td ><input class="input input-transaksi" data-stok="{{$d->produk->stok_produk}}" type="number" name="qty[]" data-id="{{$d->id_transaksi_keranjang}}" placeholder="Jumlah"></td>
 							<td class="total-{{$d->id_transaksi_keranjang}}"></td>
 							<td class="cart-total-{{$d->id_transaksi_keranjang}} cart-total">0</td>

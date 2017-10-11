@@ -10,7 +10,6 @@ class Transaction extends Model
     protected $table = 'tb_transaksi_detail';
 
 
-
     public function cart(){
     	return $this->belongsTo('App\Cart','id_transaksi_keranjang');
     }

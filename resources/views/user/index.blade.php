@@ -44,6 +44,7 @@
                                 </a>
                             </li>
                             <li><a href="{{@url('cart')}}">Cart </a></li>
+                            <li><a href="{{@url('profile')}}">Profile</a></li>
                             <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
@@ -181,6 +182,10 @@ $(document).on('click','#btn-buy',function(){
 	$(".input-transaksi").keyup(function(){
 			var id = $(this).data('id');
 			var stok = $(this).data('stok');
+			var price = parseInt($(".cart-price-"+id).text());
+			var diskon = parseInt($(".diskon-"+id).text());
+			var diskon2 = parseInt($(".diskon-2-"+id).text());
+		
 			if ($(this).val() < 0 || $(this).val() == '') {
 
 				$('.cart-total-'+id).text('0');
@@ -191,18 +196,29 @@ $(document).on('click','#btn-buy',function(){
 					$(this).val(0);
 				}
 				else{
-					var diskon = parseInt($(".discount-"+id).text());
 
-					var harga = parseInt($(this).val()) * parseInt($(".cart-price-"+id).text());
-
-					if (diskon!=0) {
-						var total = harga * (diskon/100);
+				if (diskon == 0) {
+					var totaldiskon = price * $(this).val();
+				}
+				else{
+					if (diskon2 != 0) {
+					totaldiskon = (diskon2/100) * ($(this).val() * (price - (price * (diskon/100))));
 					}
 					else{
-						total = harga;
+					totaldiskon = $(this).val() * (price - (price * (diskon/100)));
 					}
+				}
 
-					$(".cart-total-"+id).text(total);
+				if (diskon2 ==0 ) {
+					var addDiskon = '';
+				}
+				else{
+					addDiskon = ','+diskon2;
+				}
+
+
+				$(".cart-total-"+id).text(totaldiskon);
+				$(".stok-"+id).text($(this).val());
 				}
 			}
 
@@ -212,23 +228,38 @@ $(document).on('click','#btn-buy',function(){
 
 		});
 				$("#qty").keyup(function(){
+
 			var stock = parseInt($(".stock").text());
 			var price = parseInt($(".price").text());
 			var diskon = parseInt($(".diskon").text());
+			var diskon2 = parseInt($(".diskon-2").text());
 			if ($(this).val() > stock || $(this).val() < 0) {
 					alert('tidak bisa');
 					$(this).val(0);
 
 			}
 			else{
+
 				if (diskon == 0) {
 					var totaldiskon = price * $(this).val();
 				}
 				else{
-					totaldiskon = price * $(this).val() * (diskon/100);
+					if (diskon2 != 0) {
+					totaldiskon = (diskon2/100) * ($(this).val() * (price - (price * (diskon/100))));
+					}
+					else{
+					totaldiskon = $(this).val() * (price - (price * (diskon/100)));
+					}
+				}
+
+				if (diskon2 ==0 ) {
+					var addDiskon = '';
+				}
+				else{
+					addDiskon = ','+diskon2;
 				}
 				$("#total").text(totaldiskon);
-				$("#diskon").val(diskon);
+				$("#diskon").val(diskon+addDiskon);
 				$("#banyak-produk").val($(this).val());
 			}
 		});
