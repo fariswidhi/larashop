@@ -31,7 +31,7 @@ class MainController extends Controller
      */
     public function index()
     {
-        $data = Product::all();
+        $data = Product::where('stok_produk','>',5)->get();
 
         return view('user/product',compact('data'));
     }
@@ -247,7 +247,7 @@ class MainController extends Controller
     public function success($code){
         $num = Transaction::where('id_transaksi',$code)->count();
 
-        if ($num != null) {
+        // if ($num != null) {
         $data = Transaction::where('id_transaksi',$code)->get();
         $subtotal = Transaction::select(DB::raw("SUM(total) as total"))->where('id_transaksi',$code)->first()->total;
         $diskon = Transaction::select(DB::raw("SUM(total) as total"))->where('id_transaksi',$code)->first()->diskon;
@@ -258,16 +258,18 @@ class MainController extends Controller
         $UserTransaction = UserTransaction::where('id_user',Auth::user()->id)->first();
         $countUserTransaction  = UserTransaction::where('id_user',Auth::user()->id)->count();
         $voucher = Voucher::where('aktif','1')->first();
+        $voucherCount = Voucher::where('aktif','1');
         $kodeunik = $first->kode_unik;
         $keranjang = $first->id_transaksi_keranjang;
         $diskon = $first->diskon;
 
 
 
-        return view('user/success',compact('data','total','kodeunik','keranjang','banks','voucher','UserTransaction','code','diskon','countUserTransaction'));
-        }
 
-        return abort(404);
+        return view('user/success',compact('data','total','kodeunik','keranjang','banks','voucher','UserTransaction','code','diskon','countUserTransaction','voucherCount'));
+        // }
+
+        // return abort(404);
 
     }
 

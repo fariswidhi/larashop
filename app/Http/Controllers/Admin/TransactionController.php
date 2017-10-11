@@ -66,13 +66,13 @@ class TransactionController extends Controller
 
 
 			$voucherActive = Voucher::where('aktif',1)->count();
-			$maxTransaction = Voucher::where('aktif',1)->first()->banyak_transaksi;
+
 			$voucher = Voucher::where('aktif',1)->first();
 
 			$datatotal = Transaction::select(DB::raw('SUM(total) as total'))->where('id_transaksi',$tr)->groupBy('id_transaksi')->first();
 
 			if ($voucherActive > 0) {
-
+							$maxTransaction = Voucher::where('aktif',1)->first()->banyak_transaksi;
 				$user = UserTransaction::where('id_user',$userId);
 				if ($user->count() == 0) {
 				$UserTransaction = new UserTransaction;
@@ -94,11 +94,6 @@ class TransactionController extends Controller
 
 				UserTransaction::where('id_user',$userId)->update(['total_voucher'=>$user->first()->total_voucher+(($voucher->persen/100) * $datatotal->total),'total_transaksi'=>$user->first()->total_transaksi+1]);		
 				}
-
-
-		
-				
-
 				}
 				
 				Transaction::where('id_transaksi',$tr)->update(['status_transaksi'=>$request->status]);		

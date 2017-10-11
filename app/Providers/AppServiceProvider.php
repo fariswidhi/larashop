@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use App\Category;
 use App\Cart;
 use Auth;
-
+use App\UserTransaction;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -20,8 +20,10 @@ class AppServiceProvider extends ServiceProvider
         //
         Schema::defaultStringLength(60);
         $cat = Category::all();
-
+        // $UserTransaction = UserTransaction::where('id_user',Auth::user()->id);
+        // Auth::user()->check();
         view()->share('cats',$cat);
+        // view()->share('UserTransaction',$UserTransaction);
     }
 
     /**

@@ -126,8 +126,6 @@ class VoucherController extends Controller
             $name = $edit[$field];
 
             $class->$val = $request->$name;
-
-// echo $val;
         }
 
         $class->save();

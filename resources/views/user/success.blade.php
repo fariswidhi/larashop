@@ -71,6 +71,7 @@
 													<h2>{{'Rp. '.number_format($total-$diskon+$kodeunik,2,',','.')}}</h2>
 
 													@if($countUserTransaction != null)
+													@if($voucherCount->count() != null)
 													@if($UserTransaction->total_transaksi == $voucher->banyak_transaksi)
 													<br>
 
@@ -78,6 +79,7 @@
 													<br>
 													<a href="{{@url('useVoucher/'.$code)}}">Pakai Voucher?</a>
 													<br>
+													@endif
 													@endif
 													@endif
 													<br>
