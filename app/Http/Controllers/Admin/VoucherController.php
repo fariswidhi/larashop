@@ -22,6 +22,12 @@ class VoucherController extends Controller
     protected $key = 'id_voucher';
     protected $tr = ['banyak_transaksi','persen'];
 
+    public function __construct()
+    {
+        $this->middleware('isAdmin');
+    }
+    
+
     public function data_json(){
             
     }

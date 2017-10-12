@@ -13,7 +13,15 @@
 						<td><a href="{{@url('transaction/'.$data->id_transaksi)}}">{{$data->id_transaksi}}</a></td>
 						<td>{{$data->nama_penerima}}</td>
 						<td>{{$data->total}}</td>
-						<td>{{$data->status_transaksi}}</td>
+						<td>
+						@if($data->status_transaksi == 1)
+							dikirim
+						@elseif($data->status_transaksi == 2)
+						ditolak
+						@else
+						menunggu
+						@endif
+						</td>
 					</tr>
 					@endforeach
 				</tbody>

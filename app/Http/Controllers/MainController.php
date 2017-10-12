@@ -41,13 +41,15 @@ class MainController extends Controller
         $getId = Product::where('permalink',$product)->first();
         $data = Product::find($getId->id);
 
-
+        if (Auth::check()) {
         $cart = Cart::where('id_produk',$getId->id)
                 ->where('id_user',Auth::user()->id)
                 ->where('status',0)->count();
         $dataCart = Cart::where('id_produk',$getId->id)
                 ->where('id_user',Auth::user()->id)
                 ->where('status',0)->first();
+
+        }
 
         return view('user/detail',compact('data','cart','dataCart'));
     }
@@ -66,6 +68,8 @@ class MainController extends Controller
 
     }
 
+    
+
     public function wrap_search(Request $request){
         $query = $request->q;
         return redirect('search/'.$query);
@@ -73,7 +77,7 @@ class MainController extends Controller
 
     public function search($query){
          $query = str_replace('+', ' ', $query);
-        $data = Product::where('nama_produk','LIKE',"%".$query."%")->get();
+        $data = Product::where('nama_produk','LIKE',"%".$query."%")->where('stok_produk','>',5)->get();
         $title = $query; 
         return view('user/search',compact('data','title'));
 

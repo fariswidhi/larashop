@@ -9,7 +9,7 @@
 				<div class="wrap-card">
 						<div class="card">
 							<span class="product-category">{{$d->categories->nama_kategori}}</span>
-							<span style="float: right;color: #fff;clear: both;background: red;position: absolute;right: 0px;">{{$d->id_diskon ==0 ? '':$d->diskon->potongan.'%'}}</span>
+							<span style="float: right;color: #fff;clear: both;background: red;position: absolute;right: 0px;">{{$d->id_diskon ==0 ? '':str_replace(',','+',$d->diskon->potongan).'%'}}</span>
 
 				
 							<img src="{{ @url('img/'.$d->foto) }}" >

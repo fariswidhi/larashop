@@ -22,6 +22,11 @@ class DiskonController extends Controller
     protected $key = 'id_diskon';
     protected $tr = ['nama','potongan'];
 
+    public function __construct()
+    {
+        $this->middleware('isAdmin');
+    }
+    
     public function data_json(){
             
     }

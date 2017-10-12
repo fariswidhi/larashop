@@ -22,6 +22,11 @@ class CategoryController extends Controller
     protected $key = 'id';
     protected $tr = ['nama_kategori'];
 
+    public function __construct()
+    {
+        $this->middleware('isAdmin');
+    }
+    
     public function data_json(){
         
     }

@@ -7,7 +7,7 @@
 			<div class="panel">
 		<h3 style="margin: 0;padding: 5px;">{{ $data->nama_produk }}
 		@if($data->id_diskon != 0)
-			({{'Diskon '.$data->diskon->potongan.' %'}})
+			({{'Diskon '.str_replace(',','+',$data->diskon->potongan).'%'}})
 		@endif
 		</h3>
 
@@ -44,6 +44,7 @@
 					</div>
 					<div class="xl-3">
 						<div class="wrapper">
+							@if(Auth::check())
 							@if($cart == 0):
 	      					<form action="{{route('add.cart')}}" method="post">
 							{{csrf_field()}}
@@ -55,6 +56,11 @@
 							<button class="btn btn-red btn-cart" >Hapus dari Keranjang</button>
 							</a>
 							@endif
+							@endif
+								      					<form action="{{route('add.cart')}}" method="post">
+							{{csrf_field()}}
+							<button class="btn btn-blue btn-cart" name="product" value="{{$data->id}}">Tambahkan Ke Keranjang</button>
+							</form>
 							<a href="{{@url('buy/'.$data->permalink)}}">
 							<button class="btn btn-blue btn-buyying">Beli</button>
 							</a>

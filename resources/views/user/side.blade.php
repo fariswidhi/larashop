@@ -10,7 +10,10 @@
 					<center>
 					<img src="{{@url('img/profile.jpg')}}" class="img-circle"> 
 					<h3>{{Auth::user()->username}}</h3>
-					<h5>{{ $UserTransaction->count() == null ? '0' : $UserTransaction->first()->total_voucher }}</h5>
+					@if(Request::segment(1) !='transactions')
+
+					@endif
+				</h5>
 					</center>					
 				</div>
 
@@ -24,7 +27,7 @@
 								<a href="{{@url('profile')}}">Profil</a>
 							</li>
 							<li>
-								<a href="{{@url('transactions')}}">Transaksi</a>
+								<a href="{{@url('profile/transactions')}}">Transaksi</a>
 							</li>
 							<li>
 								<a href="{{@url('cart')}}">Keranjang</a>

@@ -21,7 +21,11 @@ class BankController extends Controller
     protected $heads = ['Bank','Atas Nama','rekening'];
     protected $key = 'id';
     protected $tr = ['bank_name','name','rekening'];
-
+    
+    public function __construct()
+    {
+        $this->middleware('isAdmin');
+    }
     public function data_json(){
         
     }
