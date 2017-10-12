@@ -38,6 +38,8 @@ Route::post('/add-to-cart','MainController@addToCart')->name('add.cart');
 Route::post('/save-cart','MainController@saveCart')->name('save.cart');
 Route::get('/removeCart/{id}','MainController@removeCart')->name('remove.cart');
 Route::get('/cart-detail','MainController@cart_detail')->name('detail.cart');
+Route::get('/confirm/{data}','MainController@confirm');
+Route::get('/cancel/{data}','MainController@cancel');
 Route::get('/success/{data}','MainController@success');
 Route::get('/profile','MainController@profile');
 

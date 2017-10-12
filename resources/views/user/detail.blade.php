@@ -44,7 +44,7 @@
 					</div>
 					<div class="xl-3">
 						<div class="wrapper">
-							@if(Auth::check())
+							@auth
 							@if($cart == 0):
 	      					<form action="{{route('add.cart')}}" method="post">
 							{{csrf_field()}}
@@ -56,11 +56,17 @@
 							<button class="btn btn-red btn-cart" >Hapus dari Keranjang</button>
 							</a>
 							@endif
-							@endif
+
+							@else
+							
 								      					<form action="{{route('add.cart')}}" method="post">
 							{{csrf_field()}}
 							<button class="btn btn-blue btn-cart" name="product" value="{{$data->id}}">Tambahkan Ke Keranjang</button>
 							</form>
+							
+							@endauth
+
+
 							<a href="{{@url('buy/'.$data->permalink)}}">
 							<button class="btn btn-blue btn-buyying">Beli</button>
 							</a>

@@ -14,6 +14,7 @@ use App\Category;
 use App\Bank;
 use App\Voucher;
 use App\UserTransaction;
+use Carbon\Carbon;
 
 class MainController extends Controller
 {
@@ -31,6 +32,12 @@ class MainController extends Controller
      */
     public function index()
     {
+
+
+        //
+        $transactions = Transaction::where('status_transaksi',2);
+
+
         $data = Product::where('stok_produk','>',5)->get();
 
         return view('user/product',compact('data'));
@@ -178,7 +185,7 @@ class MainController extends Controller
 
     public function cart_detail(){
         $d = Cart::where('id_user',Auth::user()->id)->where('status','0')->get();
-        $data = Cart::select(DB::raw("SUM(subtotal) as total"))->where('id_user',Auth::user()->id)->first();
+        $data = Cart::select(DB::raw("SUM(subtotal) as total"))->where('id_user',Auth::user()->id)->where('status','0')->first();
         $total =$data->total;
 
         return view('user/cart-detail',compact('d','total'));
@@ -240,10 +247,38 @@ class MainController extends Controller
 
         }
 
-        return redirect('success/'.strtoupper($code));
+        return redirect('confirm/'.strtoupper($code));
 
 
  
+
+
+    }
+
+    public function confirm($code){
+        $num = Transaction::where('id_transaksi',$code)->count();
+
+        // if ($num != null) {
+        $data = Transaction::where('id_transaksi',$code)->get();
+        $subtotal = Transaction::select(DB::raw("SUM(total) as total"))->where('id_transaksi',$code)->first()->total;
+        $diskon = Transaction::select(DB::raw("SUM(total) as total"))->where('id_transaksi',$code)->first()->diskon;
+        $total = $subtotal-$diskon;
+
+        $banks = Bank::all();
+        $first = Transaction::where('id_transaksi',$code)->first();
+        $UserTransaction = UserTransaction::where('id_user',Auth::user()->id)->first();
+        $countUserTransaction  = UserTransaction::where('id_user',Auth::user()->id)->count();
+        $voucher = Voucher::where('aktif','1')->first();
+        $voucherCount = Voucher::where('aktif','1');
+        $kodeunik = $first->kode_unik;
+        $keranjang = $first->id_transaksi_keranjang;
+        $diskon = $first->diskon;
+
+
+
+
+        return view('user/confirm',compact('data','total','kodeunik','keranjang','banks','voucher','UserTransaction','code','diskon','countUserTransaction','voucherCount'));
+        // }
 
 
     }
@@ -271,9 +306,49 @@ class MainController extends Controller
 
 
         return view('user/success',compact('data','total','kodeunik','keranjang','banks','voucher','UserTransaction','code','diskon','countUserTransaction','voucherCount'));
-        // }
 
-        // return abort(404);
+    }
+
+    public function cancel($code){
+
+    
+        $transactions = Transaction::where('id_transaksi',$code)->get();
+        foreach ($transactions as $data) {
+            
+
+            if ($data->id_transaksi_satuan ==null) {
+                $productStock = $data->cart->produk->stok_produk;
+                $idProduct = $data->cart->id_produk;
+                $qtyOnCart = $data->cart->jumlah_produk;
+
+                $product = Product::find($idProduct);
+                $product->stok_produk = $productStock + $qtyOnCart;
+                $product->save();
+
+
+            }
+            else{
+                $productStock = $data->single->produk->stok_produk;
+                $idProduct = $data->single->id_produk;
+                $qtyOnCart = $data->single->jumlah_produk;
+
+
+                $product = Product::find($idProduct);
+                $product->stok_produk = $productStock + $qtyOnCart;
+                $product->save();
+
+            
+
+
+
+        }
+
+        Transaction::where('id_transaksi',$code)->delete();
+
+        }        
+
+
+        return redirect('/');
 
     }
 
@@ -386,7 +461,7 @@ class MainController extends Controller
 
 
 
-        return redirect('success/'.strtoupper($code));
+        return redirect('confirm/'.strtoupper($code));
 
 
     }

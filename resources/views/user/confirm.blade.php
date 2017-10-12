@@ -14,15 +14,11 @@
 										
 										<div class="xl-6" style="float: none;margin: 0 auto;">
 										<div style="margin: 5px">
-											<center>
-												<h1 style="padding: 0; margin: 0;">Terima Kasih...</h1>
-												<br>
 
-											</center>
 											<div class="row">
-												<div class="xl-12" style="margin: 5px;">
+													<div class="xl-12" style="margin: 5px;">
 													<h1>Detail Belanjaan</h1>
-												<table class="table table-striped">
+													<table class="table table-striped">
 													<thead>
 														<th>Produk</th>
 														<th>Harga</th>
@@ -64,27 +60,41 @@
 													@if($diskon-$total == 0)
 													<center>
 														<h2>Gratis</h2>
-														<span>Tunggu 2 x 24 Jam untuk menerima Barang </span>
+
 													</center>
 													@else
 													<center>
-													<h2>{{'Rp. '.number_format($total-$diskon+$kodeunik,2,',','.')}}</h2>
-													
-													Untuk mempercepat verifikasi, bayarkan sesuai nominal diatas.
+													<h2>{{'Rp. '.number_format($total-$diskon,2,',','.')}}</h2>
 
+													@if($countUserTransaction != null)
+													@if($voucherCount->count() != null)
+													@if($UserTransaction->total_transaksi == $voucher->banyak_transaksi)
+													<br>
+
+													Voucher Anda : <b>{{$UserTransaction->total_voucher}}</b>
+													<br>
+													<a href="{{@url('useVoucher/'.$code)}}">Pakai Voucher?</a>
+													<br>
+													@endif
+													@endif
+													@endif
+													<br>
+													
 													</center>
 
 												</div>
 											</div>
-											<center>Anda Dapat Membayarkannya Melalui Bank dibawah ini </center>
-											<br>
-											<div class="row">
-												@foreach($banks as $bank)
-												<div class="xl-4">
-													<h3 style="padding: 0;margin: 0;">{{$bank->bank_name}}</h3> <br>									{{$bank->rekening}}
-												</div>
-												@endforeach
-														@endif
+										@endif
+
+										<center>
+											<h3>Lanjutkan Transaksi?</h3>
+													<a href="{{@url('success/'.$code)}}">
+													<button class="btn btn-green" style="margin: 5px;">IYA</button>
+													</a>
+													<a href="{{@url('cancel/'.$code)}}">
+													<button class="btn btn-red" style="margin: 5px;">TIDAK</button>
+</a>
+										</center>
 											</div>
 										</div>
 									</div>
