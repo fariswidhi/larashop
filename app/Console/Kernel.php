@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateTransaction::class,['--force'])->everyMinute();
     }
 
-    /**
+    /** 
      * Register the commands for the application.
      *
      * @return void

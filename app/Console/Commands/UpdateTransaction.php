@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Transaction;
+use Carbon\Carbon;
 
 class UpdateTransaction extends Command
 {
@@ -39,31 +40,29 @@ class UpdateTransaction extends Command
     public function handle()
     {
         //
-        $transactions = Transaction::where('status_transaksi',2)->count();
+        $transactions = Transaction::where('status_transaksi',0)->get();
+        
 
-        if ($transactions == null) {
+             
+        foreach ($transactions as $transaction) {
             # code...
-            $this->info('tak ada data');
+            $create = $transaction->created_at;
+            $parse = Carbon::parse($create);
+            $limit = $parse->addMinutes(30);
+            $now = Carbon::now();
+            $id = $transaction->id_transaksi;
+
+
+            if ($now > $limit) {
+                Transaction::where('id_transaksi',$id)->update(['status_transaksi'=>2]);     
+                $this->info('ok');
+            }
+            else{
+            $this->info('tidak ada');
+            }
+
+
+
         }
-        else{
-            $this->info('ada');
-        }
-        // $now =  Carbon::parse('2017-10-11 11:43:30');
-
-        // echo $now->addMinutes(10);
-
-        // foreach ($transactions as $transaction) {
-        //     # code...
-        //     $create = $transaction->create_at;
-        //     $parse = Carbon::parse($create);
-        //     $limit = $parse->addMinutes(30);
-        //     $now = Carbon::now();
-        //     $id = $Transaction->id_transaksi;
-
-        //     if ($limit > $now) {
-        //         Transaction::where('id_transaksi',$id)->update(['status_transaksi'=>2]);     
-        //     }
-
-        // }
     }
 }
