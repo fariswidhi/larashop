@@ -70,7 +70,7 @@
 				</table>
 				
 
-				<button type="submit" class="btn btn-blue">Lanjut</button>
+				<button id="continue" type="submit" class="btn btn-blue">Lanjut</button>
 
 			</form>
 			@else

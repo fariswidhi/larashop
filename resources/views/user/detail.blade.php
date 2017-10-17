@@ -93,4 +93,10 @@
 	</div>
 
 </div>
+
+<style type="text/css">
+	.content{
+		width: 100%;	
+	}
+</style>
 @endsection

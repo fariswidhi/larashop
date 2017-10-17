@@ -191,9 +191,9 @@ $(document).on('click','#btn-buy',function(){
 				$('.cart-total-'+id).text('0');
 			}
 			else{
-				if ($(this).val() > parseInt(stok)) {
+				if ($(this).val() > parseInt(stok) || $(this).val() == '0') {
 					alert('tidak bisa');
-					$(this).val(0);
+					$(this).val('');
 				}
 				else{
 
@@ -233,9 +233,9 @@ $(document).on('click','#btn-buy',function(){
 			var price = parseInt($(".price").text());
 			var diskon = parseInt($(".diskon").text());
 			var diskon2 = parseInt($(".diskon-2").text());
-			if ($(this).val() > stock || $(this).val() < 0) {
+			if ($(this).val() > stock || $(this).val() < 0 || $(this).val() == '0') {
 					alert('tidak bisa');
-					$(this).val(0);
+					// $(this).val(0);
 
 			}
 			else{
